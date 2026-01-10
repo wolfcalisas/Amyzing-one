@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cute Lamp Login</title>
+    <style>
+        :root {
+            --bg-color: #0d0d0d;
+            --lamp-color: #333;
+            --lamp-on-color: #f1f1f1;
+            --light-glow: rgba(255, 255, 200, 0.4);
+            --cord-color: #555;
+            --text-color: #fff;
+            --input-bg: #1a1a1a;
+            --accent-color: #4CAF50;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            position: relative;
+        }
+
+        /* Taa (Lamp) Styles */
+        .lamp-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .lamp {
+            width: 150px;
+            height: 120px;
+            background-color: var(--lamp-color);
+            border-radius: 50% 50% 0 0;
+            position: relative;
+            z-index: 2;
+            transition: background 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lamp.on {
+            background-color: var(--lamp-on-color);
+            box-shadow: 0 0 50px var(--light-glow);
+        }
+
+        /* Macho ya Taa */
+        .eyes {
+            display: flex;
+            gap: 20px;
+        }
+
+        .eye {
+            width: 15px;
+            height: 2px;
+            background: #000;
+            border-radius: 2px;
+        }
+
+        .lamp.on .eye {
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .lamp-base {
+            width: 10px;
+            height: 150px;
+            background-color: var(--lamp-color);
+            position: relative;
+        }
+
+        .lamp-bottom {
+            width: 80px;
+            height: 10px;
+            background-color: var(--lamp-color);
+            border-radius: 5px;
+        }
+
+        /* Kamba ya kuwasha (Cord) */
+        .cord {
+            width: 2px;
+            height: 60px;
+            background-color: var(--cord-color);
+            position: absolute;
+            right: 20px;
+            top: 100px;
+            cursor: pointer;
+            transition: height 0.1s;
+        }
+
+        .cord::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: -4px;
+            width: 10px;
+            height: 10px;
+            background: var(--cord-color);
+            border-radius: 50%;
+        }
+
+        /* Fomu ya Login */
+        .login-card {
+            background: #111;
+            padding: 40px;
+            border-radius: 15px;
+            width: 300px;
+            color: white;
+            opacity: 0.2;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .login-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2 { text-align: center; margin-bottom: 30px; }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background: var(--input-bg);
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: white;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .login-btn:active {
+            transform: translateY(2px);
+        }
+
+        .form-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .forgot-link {
+            color: #888;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-link:hover { color: var(--accent-color); }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="lamp-container">
+            <div class="lamp" id="lamp">
+                <div class="eyes">
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                </div>
+            </div>
+            <div class="lamp-base"></div>
+            <div class="lamp-bottom"></div>
+            <div class="cord" id="cord"></div>
+        </div>
+
+        <div class="login-card" id="loginCard">
+            <h2>Welcome Back</h2>
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" placeholder="Enter your username">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" placeholder="Enter your password">
+            </div>
+            <button class="login-btn">Login</button>
+            <div class="form-footer">
+                <a href="#" class="forgot-link">Forgot Password?</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cord = document.getElementById('cord');
+        const lamp = document.getElementById('lamp');
+        const loginCard = document.getElementById('loginCard');
+
+        let isOn = false;
+
+        cord.addEventListener('click', () => {
+            isOn = !isOn;
+            
+            // Uhuishaji wa kamba (vuta-rudia)
+            cord.style.height = '80px';
+            setTimeout(() => {
+                cord.style.height = '60px';
+            }, 100);
+
+            if (isOn) {
+                lamp.classList.add('on');
+                loginCard.classList.add('visible');
+                document.body.style.backgroundColor = "#1a1a1a";
+            } else {
+                lamp.classList.remove('on');
+                loginCard.classList.remove('visible');
+                document.body.style.backgroundColor = "#0d0d0d";
+            }
+        });
+    </script>
+</body>
+</html>
+
