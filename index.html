@@ -6,14 +6,13 @@
     <title>Cute Lamp Login</title>
     <style>
         :root {
-            --bg-color: #0d0d0d;
-            --lamp-color: #333;
-            --lamp-on-color: #f1f1f1;
-            --light-glow: rgba(255, 255, 200, 0.4);
-            --cord-color: #555;
-            --text-color: #fff;
-            --input-bg: #1a1a1a;
+            --bg-color: #050505;
+            --lamp-color: #222;
+            --lamp-on-color: #fdfbd3;
+            --light-glow: rgba(253, 251, 211, 0.5);
+            --cord-color: #444;
             --accent-color: #4CAF50;
+            --input-bg: #1a1a1a;
         }
 
         body {
@@ -24,18 +23,29 @@
             align-items: center;
             min-height: 100vh;
             background-color: var(--bg-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            transition: background 0.4s ease;
         }
 
         .container {
             display: flex;
+            flex-direction: column; /* Kwa simu: Taa juu, fomu chini */
             align-items: center;
-            gap: 50px;
-            position: relative;
+            justify-content: center;
+            gap: 40px;
+            width: 90%;
+            max-width: 900px;
         }
 
-        /* Taa (Lamp) Styles */
+        /* Laptop View Adjustments */
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row; /* Kwa laptop: Pembeni kwa pembeni */
+                gap: 100px;
+            }
+        }
+
+        /* Taa Styles */
         .lamp-container {
             position: relative;
             display: flex;
@@ -44,13 +54,13 @@
         }
 
         .lamp {
-            width: 150px;
-            height: 120px;
+            width: 140px;
+            height: 100px;
             background-color: var(--lamp-color);
             border-radius: 50% 50% 0 0;
             position: relative;
-            z-index: 2;
-            transition: background 0.3s;
+            z-index: 5;
+            transition: all 0.3s ease;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -58,136 +68,140 @@
 
         .lamp.on {
             background-color: var(--lamp-on-color);
-            box-shadow: 0 0 50px var(--light-glow);
-        }
-
-        /* Macho ya Taa */
-        .eyes {
-            display: flex;
-            gap: 20px;
+            box-shadow: 0 -10px 40px var(--light-glow), 0 20px 80px var(--light-glow);
         }
 
         .eye {
-            width: 15px;
+            width: 12px;
             height: 2px;
             background: #000;
+            margin: 0 8px;
             border-radius: 2px;
+            transition: 0.3s;
         }
 
         .lamp.on .eye {
-            height: 10px;
+            height: 12px;
             border-radius: 50%;
         }
 
         .lamp-base {
-            width: 10px;
-            height: 150px;
+            width: 8px;
+            height: 120px;
             background-color: var(--lamp-color);
-            position: relative;
         }
 
         .lamp-bottom {
-            width: 80px;
+            width: 70px;
             height: 10px;
             background-color: var(--lamp-color);
-            border-radius: 5px;
+            border-radius: 10px;
         }
 
-        /* Kamba ya kuwasha (Cord) */
+        /* Kamba */
         .cord {
             width: 2px;
-            height: 60px;
+            height: 50px;
             background-color: var(--cord-color);
             position: absolute;
             right: 20px;
             top: 100px;
             cursor: pointer;
-            transition: height 0.1s;
+            z-index: 10;
+            transition: height 0.1s ease-in-out;
         }
 
         .cord::after {
             content: '';
             position: absolute;
-            bottom: -10px;
+            bottom: -8px;
             left: -4px;
             width: 10px;
             height: 10px;
-            background: var(--cord-color);
+            background: #666;
             border-radius: 50%;
         }
 
-        /* Fomu ya Login */
+        /* Login Card - Imefichwa kabisa mwanzo */
         .login-card {
-            background: #111;
-            padding: 40px;
-            border-radius: 15px;
-            width: 300px;
+            background: #121212;
+            padding: 30px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 320px;
             color: white;
-            opacity: 0.2;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+            
+            /* Siri ya kuificha kabisa */
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            
+            border: 1px solid #222;
         }
 
         .login-card.visible {
             opacity: 1;
-            transform: translateY(0);
+            visibility: visible;
+            transform: scale(1) translateY(0);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
         }
 
-        h2 { text-align: center; margin-bottom: 30px; }
+        h2 { text-align: center; margin-bottom: 25px; font-weight: 500; }
 
-        .input-group {
-            margin-bottom: 20px;
-        }
+        .input-group { margin-bottom: 15px; }
 
         .input-group label {
             display: block;
-            margin-bottom: 5px;
-            font-size: 0.8rem;
-            color: #888;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: #aaa;
         }
 
         .input-group input {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: var(--input-bg);
             border: 1px solid #333;
-            border-radius: 5px;
+            border-radius: 10px;
             color: white;
             outline: none;
-            box-sizing: border-box;
+            box-sizing: border-box; /* Inahakikisha input haivimbi nje */
+            transition: border 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent-color);
         }
 
         .login-btn {
-            width: 100%;
-            padding: 12px;
+            width: 100%; /* Inakaa vizuri sasa */
+            padding: 14px;
             background: var(--accent-color);
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             color: white;
-            font-weight: bold;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
             margin-top: 10px;
+            transition: background 0.3s, transform 0.1s;
         }
 
-        .login-btn:active {
-            transform: translateY(2px);
-        }
+        .login-btn:hover { background: #45a049; }
+        .login-btn:active { transform: scale(0.98); }
 
         .form-footer {
-            margin-top: 1.5rem;
+            margin-top: 20px;
             text-align: center;
         }
 
         .forgot-link {
-            color: #888;
+            color: #666;
             font-size: 0.8rem;
             text-decoration: none;
-            transition: all 0.3s ease;
         }
-
-        .forgot-link:hover { color: var(--accent-color); }
-
     </style>
 </head>
 <body>
@@ -195,10 +209,8 @@
     <div class="container">
         <div class="lamp-container">
             <div class="lamp" id="lamp">
-                <div class="eyes">
-                    <div class="eye"></div>
-                    <div class="eye"></div>
-                </div>
+                <div class="eye"></div>
+                <div class="eye"></div>
             </div>
             <div class="lamp-base"></div>
             <div class="lamp-bottom"></div>
@@ -232,23 +244,22 @@
         cord.addEventListener('click', () => {
             isOn = !isOn;
             
-            // Uhuishaji wa kamba (vuta-rudia)
-            cord.style.height = '80px';
+            // Animation ya kuvuta kamba
+            cord.style.height = '75px';
             setTimeout(() => {
-                cord.style.height = '60px';
-            }, 100);
+                cord.style.height = '50px';
+            }, 150);
 
             if (isOn) {
                 lamp.classList.add('on');
                 loginCard.classList.add('visible');
-                document.body.style.backgroundColor = "#1a1a1a";
+                document.body.style.backgroundColor = "#121212";
             } else {
                 lamp.classList.remove('on');
                 loginCard.classList.remove('visible');
-                document.body.style.backgroundColor = "#0d0d0d";
+                document.body.style.backgroundColor = "#050505";
             }
         });
     </script>
 </body>
 </html>
-
